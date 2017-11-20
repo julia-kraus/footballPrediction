@@ -6,7 +6,7 @@ season = 'E2015'
 
 class PCAForTeamPerformance():
     def __init__(self):
-        self.dataset = extract_data.FootballData().dataSets[season]
+        self.dataset = extract_data.FootballData().seasons_data[season]
         self.oddsSet = []
 
     def extractPerformanceData(self):

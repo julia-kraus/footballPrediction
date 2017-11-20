@@ -7,7 +7,7 @@ import numpy as np
 
 class GamePredictor:
     def __init__(self):
-        self.dataSet = extract_data.FootballData().dataSets
+        self.dataSet = extract_data.FootballData().seasons_data
         self.trainSet = self.dataSet['E2014']
         self.trainSet.extend(self.dataSet['E2013'])
         self.testSet = self.dataSet['E2015']

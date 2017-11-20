@@ -24,7 +24,7 @@ class clusterTeams:
 
     def readFile(self, fileName):
 
-        tempDataSet = self.fbData.dataSets[fileName]
+        tempDataSet = self.fbData.seasons_data[fileName]
         return tempDataSet
 
     def storeGameResultForEachCluster(self, team1, team2, result):

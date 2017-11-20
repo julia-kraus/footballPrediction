@@ -17,10 +17,10 @@ class PastKGames:
 
     def set_trainData(self):
 
-        self.trainSet = self.fbData.dataSets['D2015']
-        self.trainSet.extend(self.fbData.dataSets[self.season])
-        self.trainSet.extend(self.fbData.dataSets['D2013'])
-        self.trainSet.extend(self.fbData.dataSets['D2013'])
+        self.trainSet = self.fbData.seasons_data['D2015']
+        self.trainSet.extend(self.fbData.seasons_data[self.season])
+        self.trainSet.extend(self.fbData.seasons_data['D2013'])
+        self.trainSet.extend(self.fbData.seasons_data['D2013'])
 
     def find_kth_winning_pre(self, team, gamedate, game_num):
         k = 0
@@ -76,8 +76,8 @@ class gamePastKHistory():
         self.history = []
         self.fbData = FootballData()
         self.feature = []
-        self.trainData = self.fbData.dataSets['D2015']
-        self.trainData.extend(self.fbData.dataSets['D2014'])
+        self.trainData = self.fbData.seasons_data['D2015']
+        self.trainData.extend(self.fbData.seasons_data['D2014'])
 
     # add all data
 
@@ -113,7 +113,7 @@ class gamePastKHistory():
                 add_result(awayteam, hometeam, x)
 
         # for data in self.fbData().dataSets.values():
-        resultList = [list(map(findH, self.fbData.dataSets[x.split('.')[0]])) for x in self.fbData.filenames[0:K]]
+        resultList = [list(map(findH, self.fbData.seasons_data[x.split('.')[0]])) for x in self.fbData.filenames[0:K]]
 
         resultList = [[x for x in result if x != None] for result in resultList]
 
@@ -141,9 +141,9 @@ class gamePastKHistory():
 
 class pastKGamePerform():
     def __init__(self, season):
-        self.fbData = FootballData().dataSets['D2015']
-        self.fbData.extend(FootballData().dataSets[season])
-        self.fbData.extend(FootballData().dataSets['D2013'])
+        self.fbData = FootballData().seasons_data['D2015']
+        self.fbData.extend(FootballData().seasons_data[season])
+        self.fbData.extend(FootballData().seasons_data['D2013'])
         self.performance = []
 
     def find_K_Performance(self, team, game_date, feature, K):
