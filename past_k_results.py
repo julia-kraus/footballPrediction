@@ -54,7 +54,7 @@ class PastKResults:
         return two_team_average_past_k_results
 
 
-class GamePastKHistory:
+class PastKHistory:
     def __init__(self):
 
         self.history = []
@@ -118,6 +118,7 @@ class GamePastKHistory:
 
         return avgResults
 
+
 # ----------------------------------
 # my own tests
 season09 = PastKResults('D2009')
@@ -129,5 +130,3 @@ print(pastk)
 print(pastkboth)
 print(pastkavg)
 # ----------------------------
-# g = gamePastKHistory()
-# print g.findHistoryPastKBetweenTwoTeams('Chelsea','Bournemouth',"07/12/15",9)

@@ -1,4 +1,6 @@
 import past_k_results
+import past_k_features
+import past_k_history
 import extract_data
 import sklearn.svm as svm
 from sklearn import preprocessing
@@ -15,18 +17,18 @@ class GamePredictor:
         self.past_k_result = past_k_results
         self.past_k_game_results = past_k_results.PastKResults('D2014')
         self.past_k_game_results15 = past_k_results.PastKResults('D2015')
-        self.past_k_game_history = past_k_results.GamePastKHistory()
-        self.past_k_game_perform = past_k_results.PastKFeatures('D2014')
-        self.past_k_game_perform15 = past_k_results.PastKFeatures('D2015')
+        self.past_k_game_history = past_k_history.PastKHistory()
+        self.past_k_game_perform = past_k_features.PastKFeatures('D2014')
+        self.past_k_game_perform15 = past_k_features.PastKFeatures('D2015')
 
-    def getFeaturesOfAGame(self, home_team, away_team, game_date):
+    def get_features_of_a_game(self, home_team, away_team, game_date):
 
-        featureDict = {home_team: [], away_team: []}
+        feature_dict = {home_team: [], away_team: []}
 
         home_team_feature = []
         away_team_feature = []
 
-        game_results = self.past_k_game_results.get_two_teams_past_K_results(home_team, away_team, game_date, 6)
+        game_results = self.past_k_game_results.get_two_teams_past_K_results(home_team, away_team, game_date)
 
         game_results[home_team].extend(game_results[away_team])
 
@@ -59,10 +61,10 @@ class GamePredictor:
         away_team_feature.append(game_perform_fouls[away_team])
         away_team_feature.append(game_perform_corners[away_team])
 
-        featureDict[home_team] = home_team_feature
-        featureDict[away_team] = away_team_feature
+        feature_dict[home_team] = home_team_feature
+        feature_dict[away_team] = away_team_feature
 
-        return featureDict
+        return feature_dict
 
     def transformLabel(self, label):
 
@@ -75,7 +77,7 @@ class GamePredictor:
 
     def getFeaturesOfSingleGame(self, home_team, away_team, game_date, y, season):
 
-        temp, pr = self.getFeaturesOfAGame(home_team, away_team, game_date, season)
+        temp, pr = self.get_features_of_a_game(home_team, away_team, game_date, season)
 
         temp[home_team].extend(temp[away_team])
 
@@ -104,9 +106,6 @@ class GamePredictor:
         print(scale_features)
         tx = [x[1:] for x in self.testFeatures]
         ty = [x[0] for x in self.testFeatures]
-        # print self.trainFeatures
-        # print x
-        # print y
 
         predicthome = [0, 0, 0]
         predictdraw = [0, 0, 0]

@@ -26,7 +26,7 @@ class GamePredicter():
 		self.multi.constractFeatures()
 		self.multi.doLF()
 
-	def getFeaturesOfAGame(self,home_team,away_team,game_date,season):
+	def get_features_of_a_game(self,home_team,away_team,game_date,season):
 
 		featureDict = {home_team:[],away_team:[]}
 
@@ -84,7 +84,7 @@ class GamePredicter():
 
 	def getFeaturesOfSingleGame(self,home_team,away_team,game_date,y,season):
 
-		temp,pr = self.getFeaturesOfAGame(home_team,away_team,game_date,season)
+		temp,pr = self.get_features_of_a_game(home_team,away_team,game_date,season)
 
 		temp[home_team].extend(temp[away_team])
 
