@@ -1,16 +1,16 @@
-from extract_data import footballData
+from extract_data import FootballData
 import extract_data as pd
 
 # Number of past games to be considered
 K = 6
 
 
-class PastKGames():
+class PastKGames:
     """docstring for PastKGames"""
 
     def __init__(self, season):
         self.trainSet = []
-        self.fbData = footballData()
+        self.fbData = FootballData()
         self.season = season
 
         self.set_trainData()
@@ -24,27 +24,27 @@ class PastKGames():
 
     def find_kth_winning_pre(self, team, gamedate, game_num):
         k = 0
-        fullTimeResult = []  # full time result
+        full_time_result = []  # full time result
         for item in self.trainSet:
-            if pd.compare_dateTime(gamedate, item[1]):  # compare the date
+            if pd.compare_datetime(gamedate, item[1]):  # compare the date
                 if item[2] == team:
                     k = k + 1
                     if item[6] == 'H':
-                        fullTimeResult.append(3)
+                        full_time_result.append(3)
                     elif item[6] == 'A':
-                        fullTimeResult.append(1)
+                        full_time_result.append(1)
                     else:
-                        fullTimeResult.append(2)
+                        full_time_result.append(2)
                 if item[3] == team:
                     k = k + 1
                     if item[6] == 'A':
-                        fullTimeResult.append(3)
+                        full_time_result.append(3)
                     elif item[6] == 'H':
-                        fullTimeResult.append(1)
+                        full_time_result.append(1)
                     else:
-                        fullTimeResult.append(2)
+                        full_time_result.append(2)
                 if k >= game_num:
-                    return fullTimeResult
+                    return full_time_result
         return None
 
     def getTwoTeamPastKGameResults(self, hometeam, awayteam, date, K):
@@ -58,8 +58,6 @@ class PastKGames():
         return twoTeamPastKGameResults
 
     def getTwoTeamPastAvgKGameResults(self, hometeam, awayteam, date, K):
-
-        twoTeamPastKGameAvgResults = {}
 
         twoTeamPastKGameAvgResults = self.getTwoTeamPastKGameResults(hometeam, awayteam, date, K)
 
@@ -76,7 +74,7 @@ class gamePastKHistory():
     def __init__(self):
 
         self.history = []
-        self.fbData = footballData()
+        self.fbData = FootballData()
         self.feature = []
         self.trainData = self.fbData.dataSets['D2015']
         self.trainData.extend(self.fbData.dataSets['D2014'])
@@ -87,33 +85,32 @@ class gamePastKHistory():
 
     def findHistoryPastKBetweenTwoTeams(self, hometeam, awayteam, date, K):
 
-        resultList = []
-        finalResult = {hometeam: [], awayteam: []}
+        final_result = {hometeam: [], awayteam: []}
 
-        def addresult(hometeam, awayteam, x):
+        def add_result(hometeam, awayteam, x):
             if (x[1] == 'H'):
-                finalResult[hometeam].append(3)
-                finalResult[awayteam].append(0)
+                final_result[hometeam].append(3)
+                final_result[awayteam].append(0)
             elif (x[1] == 'D'):
-                finalResult[hometeam].append(1)
-                finalResult[awayteam].append(1)
+                final_result[hometeam].append(1)
+                final_result[awayteam].append(1)
             else:
-                finalResult[hometeam].append(0)
-                finalResult[awayteam].append(3)
+                final_result[hometeam].append(0)
+                final_result[awayteam].append(3)
 
         def findH(x):
             # compare the date, hometeam and awayteam
-            if (pd.compare_dateTime(date, x[1]) and hometeam == x[2] and awayteam == x[3]):
+            if (pd.compare_datetime(date, x[1]) and hometeam == x[2] and awayteam == x[3]):
                 return ('+', x[6])
-            elif (pd.compare_dateTime(date, x[1]) and hometeam == x[3] and awayteam == x[2]):
+            elif (pd.compare_datetime(date, x[1]) and hometeam == x[3] and awayteam == x[2]):
                 return ('-', x[6])
 
         def addHistoryResult(x):
 
             if (x[0] == '+'):
-                addresult(hometeam, awayteam, x)
+                add_result(hometeam, awayteam, x)
             elif (x[0] == '-'):
-                addresult(awayteam, hometeam, x)
+                add_result(awayteam, hometeam, x)
 
         # for data in self.fbData().dataSets.values():
         resultList = [list(map(findH, self.fbData.dataSets[x.split('.')[0]])) for x in self.fbData.filenames[0:K]]
@@ -122,7 +119,7 @@ class gamePastKHistory():
 
         list(map(lambda result: list(map(addHistoryResult, result)), resultList))
 
-        return finalResult
+        return final_result
 
     def findAvgHistoryPastKBetweenTwoTeams(self, hometeam, awayteam, date, K):
 
@@ -144,26 +141,26 @@ class gamePastKHistory():
 
 class pastKGamePerform():
     def __init__(self, season):
-        self.fbData = footballData().dataSets['D2015']
-        self.fbData.extend(footballData().dataSets[season])
-        self.fbData.extend(footballData().dataSets['D2013'])
+        self.fbData = FootballData().dataSets['D2015']
+        self.fbData.extend(FootballData().dataSets[season])
+        self.fbData.extend(FootballData().dataSets['D2013'])
         self.performance = []
 
-    def findKPerformance(self, team, gameDate, feature, K):
+    def find_K_Performance(self, team, game_date, feature, K):
         # already does cases for home and away team!
         # -->feature goals [4], feature corners [16], feature shots on target [12]
         k = 0
-        fullTimeResult = []  # full time result
+        full_time_result = []  # full time result
         for item in self.fbData:
-            if pd.compare_dateTime(gameDate, item[1]):  # compare the date if it was previous game
+            if pd.compare_datetime(game_date, item[1]):  # compare the date if it was previous game
                 if item[2] == team:
                     k += 1
-                    fullTimeResult.append(int(item[feature]))
+                    full_time_result.append(int(item[feature]))
                 if item[3] == team:
                     k = k + 1
-                    fullTimeResult.append(int(item[feature + 1]))
+                    full_time_result.append(int(item[feature + 1]))
                 if k >= K:
-                    return fullTimeResult
+                    return full_time_result
         return None
 
     # Performance for one feature. Features used here are: goals[4,5]: FTHG, FTAG,
@@ -172,9 +169,9 @@ class pastKGamePerform():
 
         twoTeamPastKGamePer = {}
 
-        twoTeamPastKGamePer[hometeam] = self.findKPerformance(hometeam, gameDate, feature, K)
+        twoTeamPastKGamePer[hometeam] = self.find_K_Performance(hometeam, gameDate, feature, K)
 
-        twoTeamPastKGamePer[awayteam] = self.findKPerformance(awayteam, gameDate, feature, K)
+        twoTeamPastKGamePer[awayteam] = self.find_K_Performance(awayteam, gameDate, feature, K)
 
         return twoTeamPastKGamePer
 

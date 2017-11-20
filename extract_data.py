@@ -3,13 +3,13 @@ import datetime
 import glob
 
 
-def string_toDatetime(string):
+def string_to_datetime(string):
     return datetime.datetime.strptime(string, '%d/%m/%y')
 
 
-def compare_dateTime(dateStr1, dateStr2):
-    date1 = string_toDatetime(dateStr1)
-    date2 = string_toDatetime(dateStr2)
+def compare_datetime(dateStr1, dateStr2):
+    date1 = string_to_datetime(dateStr1)
+    date2 = string_to_datetime(dateStr2)
     if (date1.date() > date2.date()):
         return -1
     elif (date1.date() == date2.date()):
@@ -18,16 +18,16 @@ def compare_dateTime(dateStr1, dateStr2):
         return 1
 
 
-class footballData():
+class FootballData:
     def __init__(self):
 
         self.filenames = glob.glob('*.csv')
         self.dataSets = {}
         self.teamNamesPerSeason = {}
 
-        self.readData(self.filenames)
-        self.extractTeamNames()
-        self.sortByDate()
+        self.read_data()
+        self.get_team_names()
+        self.sort_by_date()
 
     def load_data(self, filename):
         data = []
@@ -41,49 +41,24 @@ class footballData():
 
         return data
 
-    def readData(self, filenames):
-
-        def addDataSets(x):
-            self.dataSets[x.split('.')[0]] = self.load_data(x)
+    def read_data(self):
 
         for file in self.filenames:
-            addDataSets(file)
+            self.dataSets[file.split('.')[0]] = self.load_data(file)
 
-        # print self.dataSets
-
-    def extractTeamNameBySeason(self, season):
+    def get_team_names_all_seasons(self, season):
 
         return list(set([x[2] for x in self.dataSets[season]]))
 
-    def extractTeamNames(self):
-
-        def addTeamNames(x):
-            self.teamNamesPerSeason[x.split('.')[0]] = self.extractTeamNameBySeason(x.split('.')[0])
+    def get_team_names(self):
 
         for file in self.filenames:
-            addTeamNames(file)
+            self.teamNamesPerSeason[file.split('.')[0]] = self.get_team_names_all_seasons(file.split('.')[0])
 
-    def sortByDate(self):
+    def sort_by_date(self):
 
-        def string_toDatetime(string):
-            return datetime.datetime.strptime(string, '%d/%m/%y')
-
-        def compare_dateTime(dateStr1, dateStr2):
-
-            date1 = string_toDatetime(dateStr1)
-            date2 = string_toDatetime(dateStr2)
-            if (date1.date() > date2.date()):
-                return -1
-            elif (date1.date() == date2.date()):
-                return 0
-            else:
-                return 1
+        map(lambda x: self.dataSets[x].sort(lambda a, b: compare_datetime(a[1], b[1])), list(self.dataSets.keys()))
 
 
-            map(lambda x: self.dataSets[x].sort(lambda a, b: compare_dateTime(a[1], b[1])), list(self.dataSets.keys()))
-
-
-test = footballData()
-print(test.dataSets['D2015'][2][1])
-
-print(sum([1]))
+test = FootballData()
+print(test.dataSets['D2015'])

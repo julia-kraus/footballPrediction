@@ -1,5 +1,5 @@
 from sklearn.cluster import KMeans
-from extract_data import footballData
+from extract_data import FootballData
 from sklearn import preprocessing
 import numpy as np
 
@@ -19,7 +19,7 @@ class clusterTeams:
         self.teams = [[[0 for col2 in range(3)] for col in range(5)] for row in range(5)]
         self.teams_cluster = {}
         self.scores = []
-        self.fbData = footballData()
+        self.fbData = FootballData()
         self.team_names = self.fbData.teamNamesPerSeason[fileName]
 
     def readFile(self, fileName):
