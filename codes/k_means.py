@@ -1,19 +1,14 @@
-import csv
 from sklearn.cluster import KMeans
-import pandas as pd
-from phrasingData import footballData
+from extract_data import footballData
 from sklearn import preprocessing
 import numpy as np
 
-# team_names=['Tottenham','Everton','Liverpool','Sunderland','Arsenal','Southampton','Stoke','Newcastle','Chelsea','Swansea'
-# ,'West-Ham','West-Brom','Man-City','Aston-Villa','Crystal-Palace','Leicester','Man-United','Norwich','Watford','Bournemouth']
+fileName = 'D2015'
 
-fileName = 'E2015'
-# fileName2 = 'E2013'
 numbersOfCluster = 5
 
 
-class clusterTeams():
+class clusterTeams:
     def __init__(self):
 
         self.team_features = []
@@ -27,16 +22,13 @@ class clusterTeams():
         self.fbData = footballData()
         self.team_names = self.fbData.teamNamesPerSeason[fileName]
 
-    def readFile(self, fileName, tempDataSet):
+    def readFile(self, fileName):
 
         tempDataSet = self.fbData.dataSets[fileName]
         return tempDataSet
 
     def storeGameResultForEachCluster(self, team1, team2, result):
 
-        '''
-        Calcutlate
-        '''
         if team1 in list(self.teams_cluster.keys()):
             if team2 in list(self.teams_cluster.keys()):
                 if (result == 'H'):

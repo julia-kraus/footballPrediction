@@ -1,10 +1,8 @@
-import csv
-from phrasingData import footballData
-import phrasingData as pd
-from sklearn import linear_model
+from extract_data import footballData
+import extract_data as pd
 
+# Number of past games to be considered
 K = 6
-linearR = linear_model.LinearRegression()
 
 
 class PastKGames():
@@ -126,7 +124,7 @@ class gamePastKHistory():
 
         return finalResult
 
-    def findAvgHitoryPastKBetweenTwoTeams(self, hometeam, awayteam, date, K):
+    def findAvgHistoryPastKBetweenTwoTeams(self, hometeam, awayteam, date, K):
 
         avgResults = {}
 
@@ -183,14 +181,13 @@ class pastKGamePerform():
     def getAvgPerformance(self, hometeam, awayteam, gameDate, feature, K):
 
         twoTeamPastKPer = self.getPerformance(hometeam, awayteam, gameDate, feature, K)
-        # print twoTeamPastKPer
 
         twoTeamPastKPer[hometeam] = float(sum(twoTeamPastKPer[hometeam])) / len(twoTeamPastKPer[hometeam])
         twoTeamPastKPer[awayteam] = float(sum(twoTeamPastKPer[awayteam])) / len(twoTeamPastKPer[awayteam])
         return twoTeamPastKPer
 
 
-# a = gamePastKHitory()
+# a = gamePastKHistory()
 
 # pg = pastKGamePerform('D2014')
 # perDict = pg.getAvgPerformance("Dortmund", "Hannover", "25/10/14", 13, 4)
@@ -211,9 +208,9 @@ class pastKGamePerform():
 
 pastKgame = PastKGames('D2015')
 
-pastResult = pastKgame.getTwoTeamPastKGameResults("Hamburg","Darmstadt","09/04/16",4)
-print ('hometeam:',pastResult["Hamburg"])
-print ('awayteam:',pastResult["Darmstadt"])
-# g = gamePastKHitory()
-# print g.findHitoryPastKBetweenTwoTeams('Chelsea','Bournemouth',"07/12/15",9)
+pastResult = pastKgame.getTwoTeamPastKGameResults("Hamburg", "Darmstadt", "09/04/16", 4)
+print('hometeam:', pastResult["Hamburg"])
+print('awayteam:', pastResult["Darmstadt"])
+# g = gamePastKHistory()
+# print g.findHistoryPastKBetweenTwoTeams('Chelsea','Bournemouth',"07/12/15",9)
 # print pastKgame.trainSet[3][6]

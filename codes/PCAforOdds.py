@@ -1,4 +1,4 @@
-import phrasingData
+import extract_data
 from sklearn.decomposition import PCA
 
 season = 'E2015'
@@ -6,7 +6,7 @@ season = 'E2015'
 
 class PCAForTeamPerformance():
     def __init__(self):
-        self.dataset = phrasingData.footballData().dataSets[season]
+        self.dataset = extract_data.footballData().dataSets[season]
         self.oddsSet = []
 
     def extractPerformanceData(self):
