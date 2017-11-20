@@ -1,14 +1,14 @@
-import extract_data
+import extract_data as ed
 
-K = 4
+corners_feature = 16
+target_shots_feature = 12
+goals_feature = 4
 
 class PastKFeatures:
-    def __init__(self, season):
-        self.fbData = FootballData().seasons_data[season]
+    def __init__(self, season, K=4):
+        self.fbData = ed.FootballData().seasons_data[season]
         self.performance = []
-        corners_feature = 16
-        target_shots_feature = 12
-        goals_feature = 4
+        self.K = K
 
     def get_past_K_one_team_one_feature(self, team, game_date, feature):
         # aggregates score of last game concerning certain features. For home team and away team
@@ -23,7 +23,7 @@ class PastKFeatures:
                 if item[3] == team:
                     k = k + 1
                     full_time_result.append(int(item[feature + 1]))
-                if k >= K:
+                if k >= self.K:
                     return full_time_result
         return None
 
@@ -44,9 +44,18 @@ class PastKFeatures:
         return two_team_past_k_feature_average
 
 
-K = 4
+def average(numbers_list):
+    return float(sum(numbers_list)) / len(numbers_list)
 
 
-def average(list):
-    return float(sum(list)) / len(list)
+# -------------------------------
+# my tests
+season14 = PastKFeatures('D2014')
+print(season14.get_past_K_one_team_one_feature('Augsburg', '21/02/15', goals_feature))
+print(season14.get_past_K_both_teams_one_feature('Augsburg', 'Leverkusen', '21/02/15', goals_feature))
 
+
+
+
+
+# --------------------------------

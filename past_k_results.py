@@ -1,18 +1,16 @@
 from extract_data import FootballData
 import extract_data as ed
 
-# Number of past games to be considered
-K = 4
 
-
-def average(list):
-    return float(sum(list)) / len(list)
+def average(numbers_list):
+    return float(sum(numbers_list)) / len(numbers_list)
 
 
 class PastKResults:
-    def __init__(self, season):
+    def __init__(self, season, K=4):
         self.football_data = FootballData()
         self.season_data = self.football_data.seasons_data[season]
+        self.K = K
 
     def get_past_K_games_results(self, team, game_date):
         k = 0
@@ -35,7 +33,7 @@ class PastKResults:
                         K_last_full_time_results.append(1)
                     else:
                         K_last_full_time_results.append(2)
-                if k >= K:
+                if k >= self.K:
                     return K_last_full_time_results
         return None
 
@@ -131,24 +129,5 @@ print(pastk)
 print(pastkboth)
 print(pastkavg)
 # ----------------------------
-# a = gamePastKHistory()
-
-# pg = pastKGamePerform('D2014')
-# perDict = pg.getAvgPerformance("Dortmund", "Hannover", "25/10/14", 13, 4)
-# print(perDict["Dortmund"])
-# print(perDict["Hannover"])
-
-# perDict = pg.getAvgPerformance("Chelsea","Bournemouth","07/12/15",13,6)
-# print perDict["Chelsea"]
-# print perDict["Bournemouth"]
-
-# perDict = pg.getAvgPerformance("Chelsea","Bournemouth","07/12/15",15,6)
-# print perDict["Chelsea"]
-# print perDict["Bournemouth"]
-
-# perDict = pg.getAvgPerformance("Chelsea","Bournemouth","07/12/15",17,6)
-# print perDict["Chelsea"]
-# print perDict["Bournemouth"]
-
 # g = gamePastKHistory()
 # print g.findHistoryPastKBetweenTwoTeams('Chelsea','Bournemouth',"07/12/15",9)
