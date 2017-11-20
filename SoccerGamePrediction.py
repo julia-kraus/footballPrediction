@@ -1,4 +1,4 @@
-import pastKresults
+import past_k_results
 import extract_data
 import sklearn.svm as svm
 from sklearn import preprocessing
@@ -8,17 +8,16 @@ import numpy as np
 class GamePredictor:
     def __init__(self):
         self.dataSet = extract_data.FootballData().seasons_data
-        self.trainSet = self.dataSet['E2014']
-        self.trainSet.extend(self.dataSet['E2013'])
-        self.testSet = self.dataSet['E2015']
+        self.trainSet = []
+        self.testSet = []
         self.trainFeatures = []
         self.testFeatures = []
-        self.past_k_result = pastKresults
-        self.past_k_game_results = pastKresults.PastKGames('E2014')
-        self.past_k_game_results15 = pastKresults.PastKGames('E2015')
-        self.past_k_game_history = pastKresults.gamePastKHistory()
-        self.past_k_game_perform = pastKresults.pastKGamePerform('E2014')
-        self.past_k_game_perform15 = pastKresults.pastKGamePerform('E2015')
+        self.past_k_result = past_k_results
+        self.past_k_game_results = past_k_results.PastKResults('D2014')
+        self.past_k_game_results15 = past_k_results.PastKResults('D2015')
+        self.past_k_game_history = past_k_results.GamePastKHistory()
+        self.past_k_game_perform = past_k_results.PastKFeatures('D2014')
+        self.past_k_game_perform15 = past_k_results.PastKFeatures('D2015')
 
     def getFeaturesOfAGame(self, home_team, away_team, game_date):
 
@@ -27,20 +26,20 @@ class GamePredictor:
         home_team_feature = []
         away_team_feature = []
 
-        game_results = self.past_k_game_results.getTwoTeamPastKGameResults(home_team, away_team, game_date, 6)
+        game_results = self.past_k_game_results.get_two_teams_past_K_results(home_team, away_team, game_date, 6)
 
         game_results[home_team].extend(game_results[away_team])
 
 
         game_history = self.past_k_game_history.findAvgHistoryPastKBetweenTwoTeams(home_team, away_team, game_date, 2)
 
-        game_perform_shots = self.past_k_game_perform.getAvgPerformance(home_team, away_team, game_date, 11, 6)
+        game_perform_shots = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 11, 6)
 
-        game_perform_shots_on = self.past_k_game_perform.getAvgPerformance(home_team, away_team, game_date, 13, 6)
+        game_perform_shots_on = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 13, 6)
 
-        game_perform_fouls = self.past_k_game_perform.getAvgPerformance(home_team, away_team, game_date, 15, 6)
+        game_perform_fouls = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 15, 6)
 
-        game_perform_corners = self.past_k_game_perform.getAvgPerformance(home_team, away_team, game_date, 17, 6)
+        game_perform_corners = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 17, 6)
 
         '''add home_team feature data'''
         # home_team_feature.append(game_results)

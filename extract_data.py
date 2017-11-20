@@ -38,11 +38,11 @@ class FootballData:
         self.seasons_data = {}
         self.teamNamesPerSeason = {}
 
-        self.get_seasons_data()
+        self.get_all_seasons_data()
         self.get_team_names()
         self.sort_by_date()
 
-    def get_seasons_data(self):
+    def get_all_seasons_data(self):
 
         for file in self.filenames:
             self.seasons_data[file.split('.')[0]] = load_data(file)
