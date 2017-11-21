@@ -8,6 +8,11 @@ def string_to_datetime(string):
 
 
 def compare_datetime(date_string1, date_string2):
+    """
+    :return +1, if date1 is before date2
+            0, if same date
+            -1, if date1 is after date2
+    """
     date1 = string_to_datetime(date_string1)
     date2 = string_to_datetime(date_string2)
     if (date1.date() > date2.date()):
@@ -57,9 +62,15 @@ class FootballData:
             self.teamNamesPerSeason[file.split('.')[0]] = self.get_team_names_all_seasons(file.split('.')[0])
 
     def sort_by_date(self):
+        """
+        sorts football games by date, newest game first
+        :return: None
+        # """
+        map(lambda x: self.seasons_data[x].sort(compare_datetime), self.seasons_data.keys())
+        # reverse order  newest first
+        for key in self.seasons_data.keys():
+            self.seasons_data[key]= self.seasons_data[key][::-1]
 
-        map(lambda x: self.seasons_data[x].sort(lambda a, b: compare_datetime(a[1], b[1])),
-            list(self.seasons_data.keys()))
-
-# test = FootballData()
-# print(test.seasons_data['D2015'])
+test = FootballData()
+print(test.seasons_data['D2006'])
+# print(compare_datetime("27/08/90", "27/09/99"))

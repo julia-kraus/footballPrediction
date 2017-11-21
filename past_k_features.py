@@ -6,7 +6,7 @@ goals_feature = 4
 
 class PastKFeatures:
     def __init__(self, season, K=4):
-        self.fbData = ed.FootballData().seasons_data[season]
+        self.football_data = ed.FootballData().seasons_data[season]
         self.performance = []
         self.K = K
 
@@ -15,8 +15,8 @@ class PastKFeatures:
         # possible features for example corners, target shots, goals
         k = 0
         full_time_result = []  # full time result
-        for item in self.fbData:
-            if ed.compare_datetime(game_date, item[1]):  # compare the date if it was previous game
+        for item in self.football_data:
+            if ed.compare_datetime(game_date, item[1]) < 0:
                 if item[2] == team:
                     k += 1
                     full_time_result.append(int(item[feature]))
@@ -25,7 +25,7 @@ class PastKFeatures:
                     full_time_result.append(int(item[feature + 1]))
                 if k >= self.K:
                     return full_time_result
-        return None
+        print(len( full_time_result))
 
     def get_past_K_both_teams_one_feature(self, home_team, away_team, game_date, feature):
 
@@ -50,9 +50,13 @@ def average(numbers_list):
 
 # -------------------------------
 # my tests
-season14 = PastKFeatures('D2014')
-print(season14.get_past_K_one_team_one_feature('Augsburg', '21/02/15', goals_feature))
-print(season14.get_past_K_both_teams_one_feature('Augsburg', 'Leverkusen', '21/02/15', goals_feature))
+# season14 = PastKFeatures('D2014')
+# print(season14.get_past_K_one_team_one_feature('Augsburg', '21/02/15', goals_feature))
+# print(season14.get_past_K_both_teams_one_feature('Augsburg', 'Leverkusen', '21/02/15', goals_feature))
+
+season09 = PastKFeatures('D2009')
+print(season09.get_past_K_one_team_one_feature('Mainz', '27/03/10', goals_feature))
+print(season09.get_past_K_both_teams_one_feature('Mainz', 'Wolfsburg', '27/03/10', goals_feature))
 
 
 

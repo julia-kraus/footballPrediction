@@ -35,13 +35,13 @@ class GamePredictor:
 
         game_history = self.past_k_game_history.findAvgHistoryPastKBetweenTwoTeams(home_team, away_team, game_date, 2)
 
-        game_perform_shots = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 11, 6)
+        game_perform_shots = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 11)
 
-        game_perform_shots_on = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 13, 6)
+        game_perform_shots_on = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 13)
 
-        game_perform_fouls = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 15, 6)
+        game_perform_fouls = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 15)
 
-        game_perform_corners = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 17, 6)
+        game_perform_corners = self.past_k_game_perform.get_average_two_teams_one_feature(home_team, away_team, game_date, 17)
 
         '''add home_team feature data'''
         # home_team_feature.append(game_results)
