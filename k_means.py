@@ -1,5 +1,5 @@
 from sklearn.cluster import KMeans
-from extract_data import FootballData
+from create_dataset import FootballData
 from sklearn import preprocessing
 import numpy as np
 

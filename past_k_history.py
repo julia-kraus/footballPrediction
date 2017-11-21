@@ -1,81 +1,79 @@
-import extract_data as ed
+import create_dataset as ed
 
-# history of two teams over all seasons
-# suspect it might be doing the same as past_k_results
+# history of last K games between two particular teams
 
 class PastKHistory:
-    def __init__(self, K=4):
-
+    def __init__(self, season, K=4):
         self.history = []
-        self.football_data = ed.FootballData()
+        self.football_data = ed.FootballData().seasons_data[season]
         self.feature = []
         self.K = K
 
-    def get_past_k_history_two_teams(self, home_team, away_team, date):
+    def add_result(home, away, x):
+        if x[1] == 'H':
+            final_result[home].append(3)
+            final_result[away].append(0)
+        elif x[1] == 'D':
+            final_result[home].append(1)
+            final_result[away].append(1)
+        else:
+            final_result[home].append(0)
+            final_result[away].append(3)
 
+    def add_history_result(x):
+        if x[0] == '+':
+            add_result(home_team, away_team, x)
+        elif x[0] == '-':
+            add_result(away_team, home_team, x)
+
+    def find_history(x):  # if game was earlier than curent game and the teams were exactly the same
+        # return full-time result (H, if home won, A, if away won, D if draw)
+        if ed.compare_datetime(date, x[1]) and home_team == x[2] and away_team == x[3]:
+            return '+', x[6]
+        elif ed.compare_datetime(date, x[1]) and home_team == x[3] and away_team == x[2]:
+            return '-', x[6]
+
+
+    def get_past_k_history_two_teams(self, home_team, away_team, date):
+        # iteriert hier über alle Datensätze!
         final_result = {home_team: [], away_team: []}
 
-        def add_result(home, away, x):
-            if (x[1] == 'H'):
-                final_result[home].append(3)
-                final_result[away].append(0)
-            elif (x[1] == 'D'):
-                final_result[home].append(1)
-                final_result[away].append(1)
-            else:
-                final_result[home].append(0)
-                final_result[away].append(3)
-
-        def findH(x):
-            if (ed.compare_datetime(date, x[1]) and home_team == x[2] and away_team == x[3]):
-                return ('+', x[6])
-            elif (ed.compare_datetime(date, x[1]) and home_team == x[3] and away_team == x[2]):
-                return ('-', x[6])
-
-        def addHistoryResult(x):
-
-            if (x[0] == '+'):
-                add_result(home_team, away_team, x)
-            elif (x[0] == '-'):
-                add_result(away_team, home_team, x)
-
+        for data in self.football_data.seasons_data.values():
+            result_list =
         # for data in self.fbData().dataSets.values():
-        resultList = [list(map(findH, self.football_data.seasons_data[x.split('.')[0]])) for x in
-                      self.football_data.filenames[0:int(self.K)]]
+        result_list = [list(map(find_history, self.football_data.seasons_data[x.split('.')[0]])) for x in
+                       self.football_data.filenames[0:int(self.K)]]
 
-        resultList = [[x for x in result if x != None] for result in resultList]
+        result_list = [[x for x in result if x is not None] for result in result_list]
 
-        list(map(lambda result: list(map(addHistoryResult, result)), resultList))
+        list(map(lambda result: list(map(add_history_result, result)), result_list))
 
         return final_result
 
     def get_past_K_average_two_teams(self, home_team, away_team, date):
 
-        avgResults = {}
+        avg_results = {}
 
-        avgResults = self.get_past_k_history_two_teams(home_team, away_team, date)
-        # print avgResults
-        if len(avgResults[home_team]) == 0:
-            avgResults[home_team] = 1
+        avg_results = self.get_past_k_history_two_teams(home_team, away_team, date)
+        # print avg_results
+        if len(avg_results[home_team]) == 0:
+            avg_results[home_team] = 1
 
-            avgResults[away_team] = 1
+            avg_results[away_team] = 1
         else:
-            avgResults[home_team] = float(sum(avgResults[home_team])) / len(avgResults[home_team])
+            avg_results[home_team] = float(sum(avg_results[home_team])) / len(avg_results[home_team])
 
-            avgResults[away_team] = float(sum(avgResults[away_team])) / len(avgResults[away_team])
+            avg_results[away_team] = float(sum(avg_results[away_team])) / len(avg_results[away_team])
 
-        return avgResults
+        return avg_results
 
 
 # ----------------------------------------
 # my tests
 
-season09 = PastKHistory('D2009')
-print(season09.football_data.filenames)
-print(type(season09.football_data.filenames))
-pastkboth = season09.get_past_k_history_two_teams("Bochum", "Stuttgart", "23/04/10")
+test = PastKHistory('D2009')
+test.get_past_k_history_two_teams('Leverkusen', 'Hannover', '24/04/17')
 
-# print(pastkboth)
 
 
 # -----------------------------------------

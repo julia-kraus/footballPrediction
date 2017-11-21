@@ -7,22 +7,6 @@ def string_to_datetime(string):
     return datetime.datetime.strptime(string, '%d/%m/%y')
 
 
-def compare_datetime(date_string1, date_string2):
-    """
-    :return +1, if date1 is before date2
-            0, if same date
-            -1, if date1 is after date2
-    """
-    date1 = string_to_datetime(date_string1)
-    date2 = string_to_datetime(date_string2)
-    if (date1.date() > date2.date()):
-        return -1
-    elif (date1.date() == date2.date()):
-        return 0
-    else:
-        return 1
-
-
 def load_data(filename):
     data = []
     with open(filename, 'rt') as file:
@@ -45,32 +29,30 @@ class FootballData:
 
         self.get_all_seasons_data()
         self.get_team_names()
+        self.convert_dates_to_datetimes()
         self.sort_by_date()
 
     def get_all_seasons_data(self):
-
         for file in self.filenames:
             self.seasons_data[file.split('.')[0]] = load_data(file)
 
-    def get_team_names_all_seasons(self, season):
+    def convert_dates_to_datetimes(self):
+        for season in self.seasons_data.keys():
+            for game in self.seasons_data[season]:
+                game[1] = string_to_datetime(game[1]).date()
 
+    def get_team_names_all_seasons(self, season):
         return list(set([x[2] for x in self.seasons_data[season]]))
 
     def get_team_names(self):
-
         for file in self.filenames:
             self.teamNamesPerSeason[file.split('.')[0]] = self.get_team_names_all_seasons(file.split('.')[0])
 
     def sort_by_date(self):
-        """
-        sorts football games by date, newest game first
-        :return: None
-        # """
-        map(lambda x: self.seasons_data[x].sort(compare_datetime), self.seasons_data.keys())
-        # reverse order  newest first
-        for key in self.seasons_data.keys():
-            self.seasons_data[key]= self.seasons_data[key][::-1]
+        for season in self.seasons_data.keys():
+            self.seasons_data[season] = sorted(self.seasons_data[season], key=lambda item: (item[1]),
+                                               reverse=True)
 
-test = FootballData()
-print(test.seasons_data['D2006'])
-# print(compare_datetime("27/08/90", "27/09/99"))
+
+# test = FootballData()
+# print(test.seasons_data['D2006'])
