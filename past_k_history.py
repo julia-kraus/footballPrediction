@@ -1,4 +1,4 @@
-import create_dataset as ed
+import load_data as ed
 
 # history of last K games between two particular teams
 

@@ -1,4 +1,4 @@
-import create_dataset as ed
+import load_data as ed
 import datetime
 
 corners_feature = 16
@@ -34,13 +34,16 @@ class PastKFeatures:
 
 
 def average(numbers_list):
-    return float(sum(numbers_list)) / len(numbers_list)
+    if numbers_list is not None:
+        return float(sum(numbers_list)) / len(numbers_list)
+    else:
+        return None
 
 # -------------------------------
 # my tests
 # season14 = PastKFeatures('D2014')
 # print(season14.get_feature_past_K('Leverkusen', datetime.date(2015, 2, 21), corners_feature))
-# print(season14.get_feature_avg_past_K('Leverkusen', datetime.date(2015, 2, 21), corners_feature))
+# print(season14.get_feature_avg_past_K('Bayern-Munich', datetime.date(2015, 2, 21), corners_feature))
 
 # season09 = PastKFeatures('D2009')
 # print(season09.get_feature_past_K('Mainz', '27/03/10', goals_feature))

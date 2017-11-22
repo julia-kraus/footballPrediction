@@ -1,10 +1,12 @@
-from create_dataset import FootballData
-import create_dataset as ed
+from load_data import FootballData
 import datetime
 
 
 def average(numbers_list):
-    return float(sum(numbers_list)) / len(numbers_list)
+    if numbers_list is not None:
+        return float(sum(numbers_list)) / len(numbers_list)
+    else:
+        return None
 
 
 class PastKResults:
@@ -45,9 +47,9 @@ class PastKResults:
 # ----------------------------------
 # my own tests
 # season14 = PastKResults('D2014')
-# print(season14.get_past_K_games_results("Leverkusen", datetime.date(2015, 2, 21)))
-# print(season14.get_past_K_avg_results("Leverkusen", datetime.date(2015, 2, 21)))
-# #
+# print(season14.get_past_K_games_results("Bayern-Munich", datetime.date(2015, 2, 14)))
+# print(season14.get_past_K_avg_results("Bayern Munich", datetime.date(2015, 2, 14)))
+#
 # print(pastk)
 # print(pastkboth)
 # print(pastkavg)

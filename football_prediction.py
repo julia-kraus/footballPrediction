@@ -1,7 +1,8 @@
 import past_k_results
 import past_k_features
-import create_dataset
+import load_data
 import datetime
+import numpy as np
 
 
 def encode_label_to_int(label):
@@ -13,10 +14,19 @@ def encode_label_to_int(label):
         return 0
 
 
+def remove_nan(array):
+    for line in array:
+        if np.isnan(line).any():
+            array.remove(line)
+
+
+    # get_features_multiple_seasons(self, seasons):
+
+
 class TrainingTestDataGenerator:
     # use years 2004-2015 as training data, years 2016 and 2017 as test data
     def __init__(self):
-        self.football_data = create_dataset.FootballData().seasons_data
+        self.football_data = load_data.FootballData().seasons_data
         self.train_seasons = {'D2004', 'D2005', 'D2006', 'D2007', 'D2008', 'D2009', 'D2010', 'D2011', 'D2012',
                               'D2013', 'D2014', 'D2015'}
         self.test_seasons = {'D2016', 'D2017'}
@@ -43,7 +53,8 @@ class TrainingTestDataGenerator:
 
         feature_dict = {home_team: self.get_feature_data(home_team, game_date, season),
                         away_team: self.get_feature_data(away_team, game_date, season)}
-        return feature_dict
+
+        return (feature_dict)
 
     def get_label(self, home_team, away_team, game_date, season):
         season_data = self.football_data[season]
@@ -55,29 +66,50 @@ class TrainingTestDataGenerator:
         label = self.get_label(home_team, away_team, game_date, season)
 
         temp = self.get_features_of_a_game(home_team, away_team, game_date, season)
-        # home_team_features and away team features are concatenated
+
         temp[home_team].extend(temp[away_team])
-        # label is inserted at slot 0 of list
+
         temp[home_team].insert(0, encode_label_to_int(label))
 
         return temp[home_team]
 
     def get_features_one_season(self, season):
+        all_features = []
+        for x in self.football_data[season]:
+            line = self.combine_label_and_features(x[2], x[3], x[1], season)
+            for elem in line:
+                if not any(elem is None):
+                    all_features.append(line)
+        for item in all_features:
+            X = item[:-1]
 
-        features = [self.combine_label_and_features(x[2], x[3], x[1], season) for x in
-                    self.train_seasons]
 
-        X = [x[1:] for x in features]
-        y = [x[0] for x in features]
-        print(X)
-        print(y)
-        return X, y
 
-    # get_features_multiple_seasons(self, seasons):
+        return all_features
+
+    def concatenate_training_test_data(self):
+        X_train = []
+        X_test = []
+        y_train
+        y_test
+        test_data = []
+        for season in self.train_seasons:
+            training_data = []
+            features_one_season = self.get_features_one_season(season)
+            training_data.append(features_one_season)
+            X_train = training_data
+        for season in self.test.seasons:
+            features_one_season = self.get_features_one_season
+
+
+
+
+
+
 
 
 # gameP = GamePredictor()
 # gameP.doSVMOnline()
 feature_extractor = TrainingTestDataGenerator()
-print(feature_extractor.combine_label_and_features('Augsburg', 'Leverkusen', datetime.date(2015, 2, 21), 'D2014'))
+# print(feature_extractor.combine_label_and_features('Bayern-Munich', 'Wolfsburg', datetime.date(2014, 8, 22), 'D2014'))
 print(feature_extractor.get_features_one_season('D2014'))
