@@ -78,13 +78,17 @@ class TrainingTestDataGenerator:
             if not any(elem is None for elem in line):
                 all_features.append(line)
         # for better training, shuffle data
-        random.shuffle(all_features)
+        # random.shuffle(all_features)
         X = []
         y = []
         for item in all_features:
             X.append(item[1:])
             y.append(item[0])
-        return X, y
+        print(X)
+        print(y)
+        print(len(X))
+        print(len(y))
+        return np.array(X), np.array(y)
 
     def concatenate_training_test_data(self):
         X_train = []
@@ -93,12 +97,12 @@ class TrainingTestDataGenerator:
         y_test = []
         for season in self.train_seasons:
             X, y = self.get_features_one_season(season)
-            X_train.append(X)
-            y_train.append(y)
+            np.concatenate([X_train, X])
+            y_train.append([y_train, y])
         for season in self.test_seasons:
             X, y = self.get_features_one_season(season)
-            X_test.append(X)
-            y_test.append(y)
+            np.concatenate([X, X_test])
+            np.concatenate([y, y_test])
         save_training_test_data(X_train, X_test, y_train, y_test)
 
         return X_train, X_test, y_train, y_test
@@ -122,6 +126,7 @@ def save_training_test_data(X_train, X_test, y_train, y_test):
 # gameP = GamePredictor()
 # gameP.doSVMOnline()
 feature_extractor = TrainingTestDataGenerator()
+feature_extractor.get_features_one_season('D2008')
 # print(feature_extractor.combine_label_and_features('Bayern-Munich', 'Wolfsburg', datetime.date(2014, 8, 22), 'D2014'))
-feature_extractor.concatenate_training_test_data()
+# feature_extractor.concatenate_training_test_data()
 
