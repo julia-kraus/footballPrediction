@@ -2,6 +2,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn import svm
 import pandas as pd
 from sklearn.metrics import confusion_matrix
+import random
 
 # still to do: shuffle X_train, y_train
 
@@ -18,20 +19,18 @@ def doSVM():
     X_test = pd.read_csv('Xtest.csv', header=None).values
     y_train = pd.read_csv('ytrain.csv', header=None).values.ravel()
     y_test = pd.read_csv('ytest.csv', header=None).values.ravel()
-    #
 
 
     X_train, X_test = normalize_data(X_train, X_test)
 
-
-    clf = svm.SVC(kernel='linear')
+    clf = svm.SVC(kernel='rbf')
     clf.fit(X_train, y_train)
     print('the score is')
     print(clf.score(X_test, y_test))
     y_pred = clf.predict(X_test)
     print(confusion_matrix(y_test, y_pred))
 
-    # create confusion matrix with scikit learn
+    # y_pred sagt nie 0!
 
         # extra Funktion machen
         # if (flag == 0):
