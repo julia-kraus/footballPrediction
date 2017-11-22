@@ -97,13 +97,13 @@ class TrainingTestDataGenerator:
         y_test = []
         for season in self.train_seasons:
             X, y = self.get_features_one_season(season)
-            np.concatenate([X_train, X])
-            y_train.append([y_train, y])
+            X_train.append(X)
+            y_train.append(y)
         for season in self.test_seasons:
             X, y = self.get_features_one_season(season)
-            np.concatenate([X, X_test])
-            np.concatenate([y, y_test])
-        save_training_test_data(X_train, X_test, y_train, y_test)
+            X_test.append(X)
+            y_test.append(y)
+        save_training_test_data(X_train.flatten(), X_test.flatten(), y_train.flatten(), y_test.flatten())
 
         return X_train, X_test, y_train, y_test
 
@@ -120,8 +120,7 @@ def save_training_test_data(X_train, X_test, y_train, y_test):
     df_ytest.to_csv('ytest.csv', header=False, index=False)
 
 
-# def update_training_data():
-
+# def update_training_data()
 
 # gameP = GamePredictor()
 # gameP.doSVMOnline()
