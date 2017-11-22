@@ -1,8 +1,9 @@
 import past_k_results
 import past_k_features
 import load_data
-import datetime
 import numpy as np
+import pandas as pd
+import random
 
 
 def encode_label_to_int(label):
@@ -20,14 +21,11 @@ def remove_nan(array):
             array.remove(line)
 
 
-    # get_features_multiple_seasons(self, seasons):
-
-
 class TrainingTestDataGenerator:
     # use years 2004-2015 as training data, years 2016 and 2017 as test data
     def __init__(self):
         self.football_data = load_data.FootballData().seasons_data
-        self.train_seasons = {'D2004', 'D2005', 'D2006', 'D2007', 'D2008', 'D2009', 'D2010', 'D2011', 'D2012',
+        self.train_seasons = {'D2006', 'D2007', 'D2008', 'D2009', 'D2010', 'D2011', 'D2012',
                               'D2013', 'D2014', 'D2015'}
         self.test_seasons = {'D2016', 'D2017'}
         self.train_data = []
@@ -77,39 +75,53 @@ class TrainingTestDataGenerator:
         all_features = []
         for x in self.football_data[season]:
             line = self.combine_label_and_features(x[2], x[3], x[1], season)
-            for elem in line:
-                if not any(elem is None):
-                    all_features.append(line)
+            if not any(elem is None for elem in line):
+                all_features.append(line)
+        # for better training, shuffle data
+        random.shuffle(all_features)
+        X = []
+        y = []
         for item in all_features:
-            X = item[:-1]
-
-
-
-        return all_features
+            X.append(item[1:])
+            y.append(item[0])
+        return X, y
 
     def concatenate_training_test_data(self):
         X_train = []
         X_test = []
-        y_train
-        y_test
-        test_data = []
+        y_train = []
+        y_test = []
         for season in self.train_seasons:
-            training_data = []
-            features_one_season = self.get_features_one_season(season)
-            training_data.append(features_one_season)
-            X_train = training_data
-        for season in self.test.seasons:
-            features_one_season = self.get_features_one_season
+            X, y = self.get_features_one_season(season)
+            X_train.append(X)
+            y_train.append(y)
+        for season in self.test_seasons:
+            X, y = self.get_features_one_season(season)
+            X_test.append(X)
+            y_test.append(y)
+        save_training_test_data(X_train, X_test, y_train, y_test)
+
+        return X_train, X_test, y_train, y_test
 
 
+def save_training_test_data(X_train, X_test, y_train, y_test):
+    df_Xtrain = pd.DataFrame(X_train)
+    df_Xtest = pd.DataFrame(X_test)
+    df_ytrain = pd.DataFrame(y_train)
+    df_ytest = pd.DataFrame(y_test)
+
+    df_Xtrain.to_csv('Xtrain.csv', header=False, index=False)
+    df_Xtest.to_csv('Xtest.csv', header=False, index=False)
+    df_ytrain.to_csv('ytrain.csv', header=False, index=False)
+    df_ytest.to_csv('ytest.csv', header=False, index=False)
 
 
-
-
+# def update_training_data():
 
 
 # gameP = GamePredictor()
 # gameP.doSVMOnline()
 feature_extractor = TrainingTestDataGenerator()
 # print(feature_extractor.combine_label_and_features('Bayern-Munich', 'Wolfsburg', datetime.date(2014, 8, 22), 'D2014'))
-print(feature_extractor.get_features_one_season('D2014'))
+feature_extractor.concatenate_training_test_data()
+

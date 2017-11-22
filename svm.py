@@ -1,29 +1,26 @@
 from sklearn import preprocessing
 from sklearn import svm
 import numpy as np
+import create_training_test_data as cd
 
 def doSVM(self):
-    x, y = self.get_features_one_season()
+    
     print(len(self.train_features))
-    scale_features = preprocessing.scale(np.array(self.trainFeatures,dtype = float))
     detailResults = []
     scale_features = preprocessing.scale(np.array(x, dtype=float))
     print(scale_features)
-    tx = [x[1:] for x in self.test_features]
-    ty = [x[0] for x in self.test_features]
 
     predicthome = [0, 0, 0]
     predictdraw = [0, 0, 0]
     predictaway = [0, 0, 0]
 
     clf = svm.SVC(kernel='linear')
-    clf.decision_function_shape = 'ovr'
-    clf.fit(x, y)
+    clf.fit(X_train, y_train)
 
     right = 0
-    for temp in enumerate(tx):
+    for temp in enumerate(X_test):
         detailResult = [self.test_set[temp[0]][2], self.test_set[temp[0]][3], self.test_set[temp[0]][6]]
-        if (ty[temp[0]] == 1):
+        if (y_test[temp[0]] == 1):
             if (clf.predict(temp[1])[0] == 1):
                 detailResult.append('H')
                 right += 1
@@ -34,7 +31,7 @@ def doSVM(self):
             else:
                 detailResult.append('A')
                 predicthome[2] += 1
-        elif (ty[temp[0]] == 0):
+        elif (y_test[temp[0]] == 0):
             if (clf.predict(temp[1])[0] == 1):
                 detailResult.append('H')
                 predictdraw[0] += 1
@@ -58,7 +55,7 @@ def doSVM(self):
                 predictaway[2] += 1
         detailResults.append(detailResult)
 
-    print(float(right) / len(tx))
+    print(float(right) / len(y_test))
     print(detailResults)
     print(predicthome, predictdraw, predictaway)
 
