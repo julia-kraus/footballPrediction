@@ -30,8 +30,6 @@ class TrainingTestDataGenerator:
         self.test_seasons = {'D2016', 'D2017'}
         self.train_data = []
         self.test_data = []
-        # self.train_data = {season: self.football_data[season] for season in self.train_seasons}
-        # self.test_data = {season: self.football_data[season] for season in self.test_seasons}
 
     def get_feature_data(self, team, game_date, season):
 
@@ -77,17 +75,11 @@ class TrainingTestDataGenerator:
             line = self.combine_label_and_features(x[2], x[3], x[1], season)
             if not any(elem is None for elem in line):
                 all_features.append(line)
-        # for better training, shuffle data
-        # random.shuffle(all_features)
         X = []
         y = []
         for item in all_features:
             X.append(item[1:])
             y.append(item[0])
-        print(X)
-        print(y)
-        print(len(X))
-        print(len(y))
         return np.array(X), np.array(y)
 
     def concatenate_training_test_data(self):
@@ -97,18 +89,22 @@ class TrainingTestDataGenerator:
         y_test = []
         for season in self.train_seasons:
             X, y = self.get_features_one_season(season)
-            X_train.append(X)
-            y_train.append(y)
+            for element, label in zip(X,y):
+                X_train.append(element)
+                y_train.append(label)
         for season in self.test_seasons:
             X, y = self.get_features_one_season(season)
-            X_test.append(X)
-            y_test.append(y)
-        save_training_test_data(X_train.flatten(), X_test.flatten(), y_train.flatten(), y_test.flatten())
+            for element, label in zip(X,y):
+                X_test.append(element)
+                y_test.append(label)
+
+        save_training_test_data(X_train, X_test, y_train, y_test)
 
         return X_train, X_test, y_train, y_test
 
 
 def save_training_test_data(X_train, X_test, y_train, y_test):
+
     df_Xtrain = pd.DataFrame(X_train)
     df_Xtest = pd.DataFrame(X_test)
     df_ytrain = pd.DataFrame(y_train)
@@ -122,10 +118,7 @@ def save_training_test_data(X_train, X_test, y_train, y_test):
 
 # def update_training_data()
 
-# gameP = GamePredictor()
-# gameP.doSVMOnline()
-feature_extractor = TrainingTestDataGenerator()
-feature_extractor.get_features_one_season('D2008')
+# feature_extractor = TrainingTestDataGenerator()
+# feature_extractor.get_features_one_season('D2008')
 # print(feature_extractor.combine_label_and_features('Bayern-Munich', 'Wolfsburg', datetime.date(2014, 8, 22), 'D2014'))
 # feature_extractor.concatenate_training_test_data()
-
