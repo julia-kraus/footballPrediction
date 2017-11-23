@@ -30,17 +30,5 @@ def doSVM():
     y_pred = clf.predict(X_test)
     print(confusion_matrix(y_test, y_pred))
 
-    # y_pred sagt nie 0!
-
-        # extra Funktion machen
-        # if (flag == 0):
-        #     ##update training set
-        #     newTrainEx = self.combine_label_and_features(self.test_set[temp[0]][2], self.test_set[temp[0]][3],
-        #                                                  self.test_set[temp[0]][1], self.test_set[temp[0]][6], 'E2015')
-        #     print(newTrainEx)
-        #     x.append(newTrainEx[1:])
-        #     y.append(newTrainEx[0])
-
-
 
 doSVM()

@@ -118,7 +118,7 @@ def save_training_test_data(X_train, X_test, y_train, y_test):
 
 # def update_training_data()
 
-# feature_extractor = TrainingTestDataGenerator()
+feature_extractor = TrainingTestDataGenerator()
 # feature_extractor.get_features_one_season('D2008')
 # print(feature_extractor.combine_label_and_features('Bayern-Munich', 'Wolfsburg', datetime.date(2014, 8, 22), 'D2014'))
-# feature_extractor.concatenate_training_test_data()
+feature_extractor.concatenate_training_test_data()
